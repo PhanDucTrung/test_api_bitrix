@@ -1,0 +1,31 @@
+
+<h1>Sửa liên hệ </h1>
+<form method="POST" action="/contact/{{contact.ID}}?_method=PUT" class="mt-4">
+  <div class="form-group">
+    <label for="NAME">Tên</label>
+    <input type="text" class="form-control" name="NAME" value="{{contact.NAME}}">  
+  </div>
+   <div class="form-group">
+    <label for="EMAIL">Email</label>
+    <input type="text" class="form-control" name="EMAIL" value="{{contact.EMAIL}}">  
+  </div>
+   <div class="form-group">
+    <label for="PHONE">SĐT</label>
+    <input type="text" class="form-control" name="PHONE" value="{{contact.PHONE}}">  
+  </div>
+   <div class="form-group">
+    <label for="WEB">Website</label>
+    <input type="text" class="form-control" name="WEB" value="{{contact.WEB}}">  
+  </div>
+    <div class="form-group">
+    <label for="SOURCE_DESCRIPTION">số TKNH</label>
+    <input type="text" class="form-control" name="SOURCE_DESCRIPTION" value="{{contact.SOURCE_DESCRIPTION}}">  
+  </div>
+    <div class="form-group">
+    <label for="ADDRESS">Địa Chỉ</label>
+    <input type="text" class="form-control" name="ADDRESS" value="{{contact.ADDRESS}}">  
+  </div>
+ 
+
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>

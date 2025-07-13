@@ -1,0 +1,98 @@
+<form name="form_conainer" method="post" action="/courses/handle-form-actions" class="mt-4">
+
+<div>
+    <div class="mt-4">
+     <h3> Contacts</h3>
+  </div>
+ 
+<div class="mt-4 d-flex align-items-center">
+    <a class="btn" href="/contact/create">Thêm Liên hệ </a> 
+</div>
+
+</div>
+
+<table class="table mt-4">
+  <thead>
+    <tr>
+ 
+      <th scope="col">ID</th>
+      <th scope="col">Tên </th>
+      <th scope="col">Email</th>
+      <th scope="col">Điện Thoại</th>
+      <th scope="col">Website</th>
+      <th scope="col">Số TKNH</th>
+      <th scope="col">Địa Chỉ</th>
+      <th scope="col">Sửa</th>
+      <th scope="col">Xóa</th>
+     
+    </tr>
+  </thead>
+  <tbody>
+    
+    {{#each Contacts}}
+    <tr>
+      <td>{{this.id}}</td>
+      <td>{{this.name}}</td>
+      <td>{{this.email}}</td>
+      <td>{{this.phone}}</td>
+      <td>{{this.website}}</td>
+      <td>{{this.bankInfo}}</td>
+      <td>{{this.address}}</td>
+      <td><a href="/contact/{{this.id}}" class="btn btn-link">Sửa</a></td>
+      <td><a href="" class="btn btn-link" data-toggle="modal" data-id="{{this.id}}" data-target="#delete-contact">Xóa</a></td>
+    </tr>
+     {{else}}
+     <tr>
+      <td colspan="5" class="center">
+      Chưa có liên hệ nào!
+      <a href="/contact/create"> tạo ngay</a>
+      </td>
+     </tr>
+    {{/each}}
+   
+  </tbody>
+</table>
+
+</form>
+
+    <!-- Modal -->
+<div class="modal fade" id="delete-contact" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">xóa liên hệ </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+             Bạn có muốn xóa không 
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+        <button type="button"  id="btn-delete" class="btn btn-danger">Xóa</button>
+      </div>
+    </div>
+  </div>
+</div>
+<form method="post" name="delete-form"></form>
+
+<script>
+
+ document.addEventListener('DOMContentLoaded',function(){
+   var contact_id;
+    var form=document.forms['delete-form'];
+    var form_conainer=document.forms['form_conainer'];
+      $('#delete-contact').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget) 
+            contact_id = button.data('id') 
+            
+      })
+
+    var btn_delete=document.getElementById('btn-delete');
+    btn_delete.onclick=function(){
+    form.action="/contact/"+contact_id+"?_method=DELETE";
+      form.submit();
+    }
+ })
+</script>
