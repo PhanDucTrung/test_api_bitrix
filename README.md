@@ -42,7 +42,7 @@ Bước 3 : Khởi chạy backend với node.js
 + NGROK_AUTH_TOKEN= $YOUR_AUTHTOKEN mà ngrok cung cấp
 + CLIENT_ID : client_id mà bitrix cung cấp khi khởi tạo ứng dụng
 + CILENT_SECRET : cilent_secret mà bitrix cung cấp khi khởi tạo ứng dụng
-+ REDIRECT_URI : Đường dẫn xử lí 'https://vidu.ngrok.io/callback'
++ REDIRECT_URI : không cần nhập vì sau khi chạy back end sẽ tự ghi đè,
 + BITRIX_DOMAIN : Đường dẫn bitrix của bạn 'yourname.bitrix24.vn'
 
 Bước 4 : quay lại cmd ở bước 3 nhập: "cd test_api_bitrix " >> "npm start"
