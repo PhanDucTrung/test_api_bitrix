@@ -1,11 +1,10 @@
-HƯỚNG DẪN CÀI ĐẶT VÀ CẤU HÌNH ỨNG DỤNG TÍCH HỢP BITRIX24 OAUTH
-
+HƯỚNG DẪN CÀI ĐẶT VÀ CẤU HÌNH BÀI TEST API CƠ BẢN
 BÀI 1 : TRIỂN KHAI CƠ CHẾ OAUTH CỦA BITRIX24 
 
 Mô tả ứng dụng :
 Ứng dụng Node.js tích hợp với Bitrix24 thông qua cơ chế OAuth, cung cấp các chức năng:
 - Nhận sự kiện Install App.
-- Lưu access token và refresh token (có thể dùng file hoặc database).
+- Lưu access token và refresh token (dùng file)
 - refresh token khi hết hạn.
 - Gọi API bất kỳ với token đang có.
 
