@@ -57,4 +57,14 @@ Bước 7 : Khi nhấn reinstall thì ứng dụng cài đặt lại và mọi t
 BƯớc 8 : sau khi truy cập http://localhost:3000/install thành công -> "xem contact ngay" để chuyển hứng qua http://localhost:3000/contact 
 
 Bước 9 : thực hiện thêm, sửa, xóa, trên ứng dụng 
+
+một số hình ảnh đemo
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/6ff41696-5cb2-46ba-8c48-0d6e1697f404" />
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/ff39904a-2a67-47cf-9dba-1c2e54d23081" />
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/837d66c6-5753-42fa-965d-aa1b9e2c83f4" />
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/d34ba1a9-0196-4e08-a88e-993ba8ba0852" />
+
+
+
+
                                       
