@@ -59,6 +59,9 @@ BƯớc 8 : sau khi truy cập http://localhost:3000/install thành công -> "xe
 Bước 9 : thực hiện thêm, sửa, xóa, trên ứng dụng 
 
 một số hình ảnh đemo
+<img width="973" height="514" alt="image" src="https://github.com/user-attachments/assets/21e9e950-dcdf-43e3-abd8-14603ea02bba" />
+<img width="985" height="633" alt="image" src="https://github.com/user-attachments/assets/d7274496-2748-48f1-8d2f-719c1f02a497" />
+
 <img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/6ff41696-5cb2-46ba-8c48-0d6e1697f404" />
 <img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/ff39904a-2a67-47cf-9dba-1c2e54d23081" />
 <img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/837d66c6-5753-42fa-965d-aa1b9e2c83f4" />
