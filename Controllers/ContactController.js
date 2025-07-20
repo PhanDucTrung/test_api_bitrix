@@ -39,13 +39,24 @@ exports.getContacts = async (req, res) => {
       if (requisite) {
         contactObj.email= requisite.RQ_EMAIL || "Không CÓ MAIL";
         contactObj.phone= requisite.RQ_PHONE || "Không CÓ MAIL";
-        contactObj.website= requisite.RQ_CONTACT || "Không web";
-        contactObj.bankName = requisite.RQ_COMPANY_NAME || "Không có tên ngân hàng";
-        contactObj.bankAccount = requisite.RQ_COMPANY_ID || "Không có số tài khoản";
-    
+        contactObj.website= requisite.RQ_CONTACT || "Không web";    
       }
-     
+          // Lấy thêm requisite.bank
+      const bankdetailRes = await axios.post(`${tokens.client_endpoint}crm.requisite.bankdetail.list`, {
+        filter: {  ENTITY_ID: requisite.ID },
+        auth: tokens.access_token
+      });
+
+      const bankdetail = bankdetailRes.data.result?.[0];
+        
+      if (bankdetail) {
+        contactObj.bankName = bankdetail.RQ_BANK_NAME || "Không có tên ngân hàng";
+        contactObj.bankAccount = bankdetail.RQ_ACC_NUM || "Không có số tài khoản";
+        contactObj.bankAddress = bankdetail.RQ_BANK_ADDR || "không co schi nhánh";
+      }
+     console.log(contactObj);
       return contactObj;
+
     }));
     res.render("home", { Contacts: contacts });
 
@@ -77,57 +88,45 @@ await callApi('crm.requisite.add', {
         RQ_EMAIL:fields.EMAIL,
         RQ_PHONE:fields.PHONE,
         RQ_CONTACT:fields.WEB,
-        RQ_COMPANY_NAME: fields.RQ_BANK_NAME ,
-       RQ_COMPANY_ID: fields.RQ_ACC_NUM 
       }
     });
 
 
-  
+    const requisiteRes = await callApi('crm.requisite.list', {
+      filter: {
+        ENTITY_TYPE_ID: 3,
+        ENTITY_ID: contactId
+      }
+    });
 
-    
-    // // 2. Thêm bank detail vào requisite
-    // await callApi('crm.requisite.bankdetail.add', {
-    //   fields: {
-    //     ENTITY_ID: requisiteRes.result, 
-    //     RQ_BANK_NAME: fields.RQ_BANK_NAME,
-    //     RQ_ACC_NUM: fields.RQ_ACC_NUM,
-    //   }
-    // });
+    const requisiteId = requisiteRes.result?.[0]?.ID;
 
-// console.log(JSON.stringify({
-//   auth: tokens.access_token,
-//   fields: {
-//     ENTITY_ID: requisiteId,
-//     COUNTRY_ID: 1,
-//     RQ_BANK_NAME: fields.RQ_BANK_NAME || "",
-//     RQ_BANK_ADDR: fields.RQ_BANK_ADDR || "",
-//     RQ_ACC_NUM: fields.RQ_ACC_NUM || "",
-//     ACTIVE: "Y",
-//     SORT: 500
-//   }
-// }, null, 2));
+    if (!requisiteId) {
+      throw new Error("❌ Không tìm thấy requisite của contact.");
+    }
+;
 
-//   await axios.post(
-//   `https://${process.env.BITRIX_DOMAIN}/rest/${tokens.user_id}/${tokens.access_token}/crm.requisite.bankdetail.add`,
-//   {
-//     auth: tokens.access_token,
-//     fields: {
-//       ENTITY_ID: Number(requisiteId),
-//       COUNTRY_ID: 1,
-//       RQ_BANK_NAME: fields.RQ_BANK_NAME || "Default Bank",
-//       RQ_BANK_ADDR: fields.RQ_BANK_ADDR || "Default Address",
-//       RQ_ACC_NUM: fields.RQ_ACC_NUM || "123456789", // tránh để rỗng
-//       ACTIVE: 'Y',
-//       SORT: 500
-//     }
-//   },
-//   {
-//     headers: {
-//       "Content-Type": "application/json"
-//     }
-//   }
-// );
+    tokens= await loadTokens();
+ await axios.post(
+  `${tokens.client_endpoint}crm.requisite.bankdetail.add`,
+  {
+    auth: tokens.access_token,
+    fields: {
+      ENTITY_ID: Number(requisiteId),
+      COUNTRY_ID: 84,
+      NAME: "THÔNG TIN NGÂN HÀNG",
+      RQ_BANK_NAME: fields.RQ_BANK_NAME || "Default Bank",
+      RQ_BANK_ADDR: fields.RQ_BANK_ADDR || "Default Address",
+      RQ_ACC_NUM: fields.RQ_ACC_NUM || "123456789",
+      ACTIVE: 'Y',
+      SORT: 500
+    }
+  },
+  {
+    headers: { "Content-Type": "application/json" }
+  }
+);
+
 
 
       res.redirect("http://localhost:3000/contact");
@@ -137,13 +136,30 @@ await callApi('crm.requisite.add', {
   }
 };
 
+exports.edit = async (req, res) => {
+  const { id } = req.params;
 
-exports.edit= async(req, res)=>{
-    const {id}  = req.params;
-    const response = await callApi('crm.contact.get', {id});
+  const response = await callApi('crm.contact.get', { id });
+    let contact = response.result || {};
+const requisiteList = await callApi('crm.requisite.list', {
+  filter: { ENTITY_TYPE_ID: 3, ENTITY_ID: contact.ID }
+});
+const requisite = requisiteList.result?.[0];
+  const bankdetailRes = await callApi(
+    'crm.requisite.bankdetail.list',
+    { filter: { ENTITY_ID: requisite.ID } }
+  );
+  const bankdetail = bankdetailRes.result?.[0] || {};
 
-      const contact  = response.result || [];
-    res.render("edit",{ contact : contact});
+  
+  contact.email = requisite.RQ_EMAIL || "không có MAIL";
+  contact.phone = requisite.RQ_PHONE || "Không có phone";
+  contact.website = requisite.RQ_CONTACT || "Không web";
+  contact.bankName = bankdetail.RQ_BANK_NAME || "Không có tên ngân hàng";
+  contact.bankAccount = bankdetail.RQ_ACC_NUM || "Không có số tài khoản";
+  contact.bankAddress = bankdetail.RQ_BANK_ADDR || "Không có chi nhánh";
+
+  res.render("edit", { contact });
 };
 
 // PUT: update
@@ -169,19 +185,41 @@ exports.edit= async(req, res)=>{
     const requisiteFields = {
         RQ_EMAIL:fields.EMAIL,
         RQ_PHONE:fields.PHONE,
-        RQ_CONTACT:fields.WEB,
-        RQ_COMPANY_NAME: fields.RQ_BANK_NAME, 
-        RQ_COMPANY_ID: fields.RQ_ACC_NUM,  
+        RQ_CONTACT:fields.WEB
     };
 
     if (requisite) {
-      // Nếu đã có requisite -> update
+     
       await axios.post(`${tokens.client_endpoint}crm.requisite.update`, {
         id: requisite.ID,
         fields: requisiteFields,
         auth: tokens.access_token
       });
       console.log(`✅ Đã update requisite ID: ${requisite.ID}`);
+    
+    }
+
+  const bankdetailRes = await axios.post(`${tokens.client_endpoint}crm.requisite.bankdetail.list`, {
+        filter: {  ENTITY_ID: requisite.ID },
+        auth: tokens.access_token
+      });
+
+      const bankdetail = bankdetailRes.data.result?.[0];
+    const bankdetailFields = {
+       RQ_BANK_NAME: fields.RQ_BANK_NAME ,
+      RQ_BANK_ADDR: fields.RQ_BANK_ADDR ,
+      RQ_ACC_NUM: fields.RQ_ACC_NUM
+      
+    };
+
+    if (bankdetail) {
+      // Nếu đã có requisite -> update
+      await axios.post(`${tokens.client_endpoint}crm.requisite.bankdetail.update`, {
+        id: bankdetail.ID,
+        fields: bankdetailFields,
+        auth: tokens.access_token
+      });
+      console.log(`✅ Đã update bankdetail ID: ${bankdetail.ID}`);
     
     }
 
